@@ -1,0 +1,85 @@
+# -------------------------
+# Node (JS / TS)
+# -------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+dist/
+build/
+.cache/
+.eslintcache
+*.tsbuildinfo
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# --------------------------------
+# Python
+# --------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# Packages
+*.egg
+*.egg-info/
+dist/
+build/
+pip-wheel-metadata/
+site/
+
+# Python tooling
+.mypy_cache/
+.pytest_cache/
+coverage.xml
+.coverage
+*.cover
+*.py,cover
+
+# --------------------------------
+# Java (Maven)
+# --------------------------------
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# IntelliJ IDEA / Eclipse
+.idea/
+*.iml
+*.iws
+.classpath
+.project
+.settings/
+
+# -------------------------
+# OS / Editor junk
+# -------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# -------------------------
+# Logs
+# -------------------------
+logs/
+*.log
+
+# -------------------------
+# Misc
+# -------------------------
+*.tmp
+*.bak
+``
