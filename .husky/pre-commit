@@ -1,6 +1,3 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 # Если нет node — просто пропускаем хук
 if ! command -v node >/dev/null 2>&1; then
   echo "Node не найдена. Пропускаю линтинг."
