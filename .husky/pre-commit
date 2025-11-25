@@ -1,1 +1,17 @@
-bunx lint-staged
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Если нет node — просто пропускаем хук
+if ! command -v node >/dev/null 2>&1; then
+  echo "Node не найдена. Пропускаю линтинг."
+  exit 0
+fi
+
+# Если нет npm — тоже пропускаем
+if ! command -v npm >/dev/null 2>&1; then
+  echo "npm не найден. Пропускаю линтинг."
+  exit 0
+fi
+
+# Основная команда
+npx lint-staged
