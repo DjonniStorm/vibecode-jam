@@ -29,5 +29,14 @@ services:
     depends_on:
       - postgres
 
+  frontend:
+    build:
+      context: ./frontend
+    container_name: jam-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
 volumes:
   jam-postgres-data:

@@ -44,7 +44,7 @@ class Api {
     });
   }
 
-  public patch<T, U extends T>(url: string, body?: T): Promise<U> {
+  public patch<T, U>(url: string, body?: T): Promise<U> {
     return this.makeRequest<U>(url, {
       method: 'PATCH',
       body: body ? JSON.stringify(body) : undefined,

@@ -13,7 +13,6 @@ import {
 import { useParams, useNavigate } from 'react-router';
 import { useInterview } from '@entities/interview';
 import { useHead } from '@unhead/react';
-import styles from './ContestStartPage.module.scss';
 
 const ContestStartPage = () => {
   const { id } = useParams<{ id: string }>();

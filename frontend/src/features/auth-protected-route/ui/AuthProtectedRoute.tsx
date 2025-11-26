@@ -15,9 +15,9 @@ export const AuthProtectedRoute = ({ children }: PropsWithChildren) => {
     );
   }
 
-  //   if (!isAuthenticated() || !user) {
-  //     return <Navigate to="/auth/login" replace />;
-  //   }
+  if (!isAuthenticated() || !user) {
+    return <Navigate to="/auth/login" replace />;
+  }
 
   return <>{children}</>;
 };

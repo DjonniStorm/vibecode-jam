@@ -33,6 +33,10 @@ const NotFoundPageLazy = lazy(() =>
   import('@pages/error').then((module) => ({ default: module.NotFoundPage })),
 );
 
+const ProfilePageLazy = lazy(() =>
+  import('@pages/profile').then((module) => ({ default: module.ProfilePage })),
+);
+
 const router = createBrowserRouter([
   {
     path: '/auth/login',
@@ -55,6 +59,14 @@ const router = createBrowserRouter([
         element: (
           <AuthProtectedRoute>
             <AllContestsPageLazy />
+          </AuthProtectedRoute>
+        ),
+      },
+      {
+        path: '/profile',
+        element: (
+          <AuthProtectedRoute>
+            <ProfilePageLazy />
           </AuthProtectedRoute>
         ),
       },
