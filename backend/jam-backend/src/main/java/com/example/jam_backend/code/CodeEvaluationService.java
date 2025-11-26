@@ -5,7 +5,6 @@ import com.example.jam_backend.llm.LlmClient;
 import com.example.jam_backend.llm.dto.LlmMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +13,11 @@ import java.util.List;
 public class CodeEvaluationService {
 
     private final LlmClient llmClient;
-    private final ObjectMapper objectMapper;
+    private final com.fasterxml.jackson.databind.ObjectMapper objectMapper =
+            new com.fasterxml.jackson.databind.ObjectMapper();
 
-    public CodeEvaluationService(LlmClient llmClient, ObjectMapper objectMapper) {
+    public CodeEvaluationService(LlmClient llmClient) {
         this.llmClient = llmClient;
-        this.objectMapper = objectMapper;
     }
 
     public CodeEvaluationResult evaluateCode(String question, String language, String userCode) {
