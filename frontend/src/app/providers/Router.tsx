@@ -10,6 +10,10 @@ const ContestPageLazy = lazy(() =>
   import('@pages/contest').then((module) => ({ default: module.ContestPage })),
 );
 
+const AllContestsPageLazy = lazy(() =>
+  import('@pages/all-contest').then((module) => ({ default: module.AllContestsPages })),
+);
+
 const router = createBrowserRouter([
   {
     path: '/contest',
@@ -17,6 +21,10 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <AllContestsPageLazy />,
+      },
+      {
+        path: '/contest/:id',
         element: <ContestPageLazy />,
       },
     ],
