@@ -32,7 +32,6 @@ public class LlmClient {
 
     private RestTemplate createRestTemplate() {
         RestTemplate template = new RestTemplate();
-        // здесь можно настроить timeouts через HttpClient, оставим по умолчанию для простоты
         return template;
     }
 

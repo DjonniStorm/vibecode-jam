@@ -22,9 +22,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/jamdb
       SPRING_DATASOURCE_USERNAME: jamuser
       SPRING_DATASOURCE_PASSWORD: jampassword
-      # JWT и LLM (ключ лучше передавать через переменную окружения)
-      SECURITY_JWT_SECRET: change_this_secret_in_real_env
-      LLM_API_KEY: ${LLM_API_KEY:-replace_me_with_real_key}
+      SECURITY_JWT_SECRET: asdfaskdfjlkasjdfjasldkfja;lskj3oi4234jrwejf
+      LLM_API_KEY: sk-qdqpnAS37uOl6sVx5Ls0_g
     ports:
       - "9081:8080"
     depends_on:
