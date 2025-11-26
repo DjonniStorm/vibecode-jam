@@ -1,3 +1,4 @@
+import { ContestStoreProvider } from '@entities/contest';
 import { ContestLayout } from '@widgets/contest-layout';
 import { lazy } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
@@ -16,16 +17,20 @@ const AllContestsPageLazy = lazy(() =>
 
 const router = createBrowserRouter([
   {
+    path: '/contests',
+    element: <AllContestsPageLazy />,
+  },
+  {
     path: '/contest',
     element: <ContestLayout />,
     children: [
       {
-        index: true,
-        element: <AllContestsPageLazy />,
-      },
-      {
         path: '/contest/:id',
-        element: <ContestPageLazy />,
+        element: (
+          <ContestStoreProvider>
+            <ContestPageLazy />
+          </ContestStoreProvider>
+        ),
       },
     ],
   },

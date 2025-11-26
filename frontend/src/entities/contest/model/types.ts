@@ -12,4 +12,17 @@ interface Task {
   name: string;
 }
 
-export type { Contest, Task };
+type TaskStatusResult = 'ok' | 'error' | 'pending';
+
+interface TaskStatus {
+  taskId: string;
+  status: TaskStatusResult;
+}
+
+interface ContestStore {
+  tasks: TaskStatus[];
+  setTasks: (tasks: TaskStatus[]) => void;
+  updateTaskStatus: (taskId: string, status: TaskStatusResult) => void;
+}
+
+export type { Contest, Task, TaskStatus, TaskStatusResult, ContestStore };

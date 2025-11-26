@@ -16,7 +16,7 @@ const AllContestsPages = () => {
       <Title order={1}>All Contest Pages</Title>
       <Stack>
         {contests.map((contest) => (
-          <Link key={contest.id} to={contest.link}>
+          <Link key={contest.id} to={contest.link} state={{ contestId: contest.id }}>
             {contest.name}
           </Link>
         ))}
