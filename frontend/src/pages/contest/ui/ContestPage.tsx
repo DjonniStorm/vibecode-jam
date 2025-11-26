@@ -1,5 +1,6 @@
-import { Title } from '@mantine/core';
-import { CodeBlock } from './CodeBlock';
+import { Container, Title, Stack, Loader, Text } from '@mantine/core';
+import { InterviewFlow } from './InterviewFlow';
+import { InterviewFlowProvider } from '../model/interview-flow-context.tsx';
 import { useHead } from '@unhead/react';
 import {
   useCopyPasteBlock,
@@ -12,7 +13,7 @@ import { useInterview } from '@entities/interview';
 
 const ContestPage = () => {
   const { id } = useParams();
-  const { data: interview } = useInterview(id || '');
+  const { data: interview, isLoading } = useInterview(id || '');
 
   // Защита контеста
   useCopyPasteBlock(true);
@@ -40,11 +41,41 @@ const ContestPage = () => {
       },
     ],
   });
+
+  if (isLoading) {
+    return (
+      <Container size="xl" py="xl">
+        <Stack align="center" justify="center" h="100%">
+          <Loader size="lg" />
+          <Text>Загрузка собеседования...</Text>
+        </Stack>
+      </Container>
+    );
+  }
+
+  if (!interview) {
+    return (
+      <Container size="xl" py="xl">
+        <Stack align="center" justify="center" h="100%">
+          <Text size="lg" c="red">
+            Собеседование не найдено
+          </Text>
+        </Stack>
+      </Container>
+    );
+  }
+
   return (
-    <section className={styles.section}>
-      <Title order={1}>Contest {id}</Title>
-      <CodeBlock className={styles['section__code-block']} />
-    </section>
+    <Container size="xl" py="xl" className={styles.section}>
+      <Stack gap="lg">
+        <Title order={1}>{interview.title}</Title>
+        {id && (
+          <InterviewFlowProvider>
+            <InterviewFlow interviewId={id} />
+          </InterviewFlowProvider>
+        )}
+      </Stack>
+    </Container>
   );
 };
 
