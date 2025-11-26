@@ -1,0 +1,66 @@
+package com.example.jam_backend.user.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public class UserRegisterRequest {
+
+    @NotBlank
+    private String name;
+
+    @NotBlank
+    private String surname;
+
+    @Email
+    @NotBlank
+    private String email;
+
+    private String telegram;
+
+    @NotBlank
+    @Size(min = 6, max = 100)
+    private String password;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTelegram() {
+        return telegram;
+    }
+
+    public void setTelegram(String telegram) {
+        this.telegram = telegram;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
+
+

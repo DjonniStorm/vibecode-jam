@@ -1,0 +1,15 @@
+package com.example.jam_backend.interview;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.UUID;
+
+public interface InterviewTurnRepository extends JpaRepository<InterviewTurn, UUID> {
+
+    List<InterviewTurn> findByInterviewOrderByTurnNumberAsc(Interview interview);
+
+    int countByInterview(Interview interview);
+}
+
+
