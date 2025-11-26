@@ -94,6 +94,35 @@ curl -X POST http://localhost:8080/api/auth/login \
 
 ## 2. Пользователь
 
+### 2.0 Как добавить администратора
+
+По умолчанию при регистрации всем пользователям ставится роль `USER`.  
+Чтобы выдать права администратора (`ADMIN`), сделайте так:
+
+1. Зарегистрируйте пользователя как обычно:
+
+```json
+POST /api/auth/register
+{
+  "name": "Admin",
+  "surname": "Adminov",
+  "email": "admin@example.com",
+  "telegram": "t.me/admin",
+  "password": "admin123"
+}
+```
+
+2. В базе Postgres выполните SQL:
+
+```sql
+UPDATE users
+SET role = 'ADMIN'
+WHERE email = 'admin@example.com';
+```
+
+После этого при логине этим пользователем Spring будет видеть роль `ROLE_ADMIN`,  
+и он сможет вызывать эндпоинты только для админов (`/api/users`, `/api/users/{id}`, `/api/users/{id}/stats`).
+
 ### 2.1 Текущий пользователь
 
 - **GET** `/api/users/me`
