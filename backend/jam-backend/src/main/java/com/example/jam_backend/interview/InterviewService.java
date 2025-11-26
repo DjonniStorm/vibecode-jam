@@ -31,6 +31,7 @@ public class InterviewService {
         interview.setUser(user);
         interview.setTitle(request.getTitle());
         interview.setStatus(InterviewStatus.IN_PROGRESS);
+        interview.setType(request.getType() != null ? request.getType() : InterviewType.MANUAL);
         interview.setCreatedAt(LocalDateTime.now());
 
         Interview saved = interviewRepository.save(interview);
@@ -67,6 +68,7 @@ public class InterviewService {
         response.setUserId(interview.getUser().getId());
         response.setTitle(interview.getTitle());
         response.setStatus(interview.getStatus());
+        response.setType(interview.getType());
         response.setCreatedAt(interview.getCreatedAt());
         return response;
     }
