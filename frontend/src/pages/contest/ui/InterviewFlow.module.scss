@@ -1,0 +1,12 @@
+.container {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+}
+
+.editorContainer {
+  border: 1px solid var(--mantine-color-dark-4);
+  border-radius: var(--mantine-radius-md);
+  overflow: hidden;
+  background: var(--mantine-color-dark-8);
+}
