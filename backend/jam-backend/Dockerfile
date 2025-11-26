@@ -5,11 +5,11 @@ WORKDIR /app
 
 # Сначала pom.xml для кэша зависимостей
 COPY pom.xml .
-RUN mvn -q -B -DskipTests dependency:go-offline
+RUN mvn -q -B -Dmaven.test.skip=true dependency:go-offline
 
 # Потом исходники и сборка
 COPY src ./src
-RUN mvn -q -B -DskipTests clean package
+RUN mvn -q -B -Dmaven.test.skip=true clean package
 
 ### Stage 2: лёгкий runtime образ
 FROM eclipse-temurin:21-jre-alpine AS runtime

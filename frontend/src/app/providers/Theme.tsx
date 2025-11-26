@@ -1,12 +1,17 @@
-// Import styles of packages that you've installed.
-// All packages except `@mantine/hooks` require styles imports
 import '@mantine/core/styles.css';
 import '@mantine/code-highlight/styles.css';
 import '@mantine/notifications/styles.css';
 
 import { MantineProvider } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
+import { Notifications } from '@mantine/notifications';
 import type { PropsWithChildren } from 'react';
 
 export const ThemeProvider = ({ children }: PropsWithChildren) => {
-  return <MantineProvider>{children}</MantineProvider>;
+  return (
+    <MantineProvider defaultColorScheme="dark">
+      <Notifications />
+      <ModalsProvider>{children}</ModalsProvider>
+    </MantineProvider>
+  );
 };
