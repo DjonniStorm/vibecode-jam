@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.paper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.form {
+  min-width: 300px;
+
+  @media (width <= 400px) {
+    min-width: 100%;
+  }
+}

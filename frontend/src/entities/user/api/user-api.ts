@@ -1,5 +1,5 @@
 import { api } from '@shared/api';
-import type { User } from '../model/types';
+import type { User, UserStats } from '../model/types';
 
 class UserApi {
   private readonly api: typeof api;
@@ -8,21 +8,26 @@ class UserApi {
     this.api = api;
   }
 
+  getMe(): Promise<User> {
+    return this.api.get<User, User>(`${this.prefix}/me`);
+  }
+
+  getMyStats(): Promise<UserStats> {
+    return this.api.get<UserStats, UserStats>(`${this.prefix}/me/stats`);
+  }
+
+  // Admin endpoints
   getUsers(): Promise<User[]> {
-    return this.api.get(`${this.prefix}/users`);
+    return this.api.get<User[], User[]>(`${this.prefix}`);
   }
 
   getUser(id: string): Promise<User> {
-    return this.api.get(`${this.prefix}/users/${id}`);
+    return this.api.get<User, User>(`${this.prefix}/${id}`);
   }
 
-  createUser(user: UserCreate): Promise<User> {
-    return this.api.post(`${this.prefix}/users`, user);
-  }
-
-  updateUser(id: string, user: User): Promise<User> {
-    return this.api.put(`${this.prefix}/users/${id}`, user);
+  getUserStats(id: string): Promise<UserStats> {
+    return this.api.get<UserStats, UserStats>(`${this.prefix}/${id}/stats`);
   }
 }
 
-export const userApi = new UserApi('uesr');
+export const userApi = new UserApi('/api/users');

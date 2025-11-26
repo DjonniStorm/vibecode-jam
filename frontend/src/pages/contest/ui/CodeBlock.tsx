@@ -3,9 +3,11 @@ import { Editor } from '@monaco-editor/react';
 import { useState } from 'react';
 
 const languages = ['javascript', 'python', 'cpp', 'c'];
+const codeThemes = ['vs-dark', 'light', 'hc-black'];
 
 const CodeBlock = ({ className }: { className?: string }) => {
   const [language, setLanguage] = useState(languages[0]);
+  const [theme, setTheme] = useState(codeThemes[0]);
   return (
     <Stack className={className}>
       <Select
@@ -19,6 +21,17 @@ const CodeBlock = ({ className }: { className?: string }) => {
           }
         }}
       />
+      <Select
+        data={codeThemes}
+        defaultValue={codeThemes[0]}
+        onChange={(value) => {
+          if (value && codeThemes.includes(value)) {
+            setTheme(value);
+          } else {
+            setTheme(codeThemes[0]);
+          }
+        }}
+      />
       <Editor
         options={{
           fontSize: 14,
@@ -26,7 +39,7 @@ const CodeBlock = ({ className }: { className?: string }) => {
         }}
         height="calc(100% - 48px)"
         width="100%"
-        theme="vs-dark"
+        theme={theme}
         defaultLanguage="javascript"
         language={language}
         value='console.log("Hello, world!");'

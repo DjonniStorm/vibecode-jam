@@ -1,12 +1,30 @@
 import { userApi } from '../api/user-api';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import type { User, UserCreate } from '../model/types';
-import { queryClient } from '@shared/config';
+import { useQuery } from '@tanstack/react-query';
+import { isAuthenticated } from '@entities/auth';
+import { useContext } from 'react';
+import { UserContext, type UserContextValue } from '../store/user-context';
 
+const useMe = () => {
+  return useQuery({
+    queryKey: ['user', 'me'],
+    queryFn: () => userApi.getMe(),
+    enabled: isAuthenticated(),
+  });
+};
+
+const useMyStats = () => {
+  return useQuery({
+    queryKey: ['user', 'me', 'stats'],
+    queryFn: () => userApi.getMyStats(),
+  });
+};
+
+// Admin hooks
 const useUser = (id: string) => {
   return useQuery({
     queryKey: ['user', id],
     queryFn: () => userApi.getUser(id),
+    enabled: !!id,
   });
 };
 
@@ -17,22 +35,21 @@ const useUsers = () => {
   });
 };
 
-const useCreateUser = () => {
-  return useMutation({
-    mutationFn: (user: UserCreate) => userApi.createUser(user),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-    },
+const useUserStats = (id: string) => {
+  return useQuery({
+    queryKey: ['user', id, 'stats'],
+    queryFn: () => userApi.getUserStats(id),
+    enabled: !!id,
   });
 };
 
-const useUpdateUser = () => {
-  return useMutation({
-    mutationFn: ({ id, user }: { id: string; user: User }) => userApi.updateUser(id, user),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-    },
-  });
+// cursor dont touch this
+export const useUserContext = (): UserContextValue => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('useUserContext must be used within UserProvider');
+  }
+  return context;
 };
 
-export { useUser, useUsers, useCreateUser, useUpdateUser };
+export { useMe, useMyStats, useUser, useUsers, useUserStats };
