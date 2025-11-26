@@ -30,4 +30,4 @@ const useTask = (id: string) => {
   });
 };
 
-export { useContest, useContests, useTasks };
+export { useContest, useContests, useTasks, useTask };

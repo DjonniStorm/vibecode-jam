@@ -1,5 +1,8 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { type PropsWithChildren, useState } from 'react';
 import type { AiTurn } from '@entities/ai-interview';
+import { InterviewFlowContext } from './interview-flow-context';
+// @ts-expect-error - React is not used in this file
+import React from 'react';
 
 interface InterviewFlowState {
   currentTurn: AiTurn | null;
@@ -9,19 +12,7 @@ interface InterviewFlowState {
   isFinished: boolean;
 }
 
-interface InterviewFlowContextValue {
-  state: InterviewFlowState;
-  setCurrentTurn: (turn: AiTurn | null) => void;
-  setAnswer: (answer: string) => void;
-  setCodeAnswer: (codeAnswer: string) => void;
-  setIsStarted: (isStarted: boolean) => void;
-  setIsFinished: (isFinished: boolean) => void;
-  resetAnswers: () => void;
-}
-
-const InterviewFlowContext = createContext<InterviewFlowContextValue | null>(null);
-
-export const InterviewFlowProvider = ({ children }: { children: ReactNode }) => {
+export const InterviewFlowProvider = ({ children }: PropsWithChildren) => {
   const [state, setState] = useState<InterviewFlowState>({
     currentTurn: null,
     answer: '',
@@ -69,12 +60,4 @@ export const InterviewFlowProvider = ({ children }: { children: ReactNode }) => 
       {children}
     </InterviewFlowContext.Provider>
   );
-};
-
-export const useInterviewFlowContext = () => {
-  const context = useContext(InterviewFlowContext);
-  if (!context) {
-    throw new Error('useInterviewFlowContext must be used within InterviewFlowProvider');
-  }
-  return context;
 };

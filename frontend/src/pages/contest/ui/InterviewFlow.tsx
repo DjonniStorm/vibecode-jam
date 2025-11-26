@@ -13,7 +13,7 @@ import {
   Alert,
 } from '@mantine/core';
 import { Editor } from '@monaco-editor/react';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   useStartAiInterview,
   useAnswerAiQuestion,
@@ -22,6 +22,7 @@ import {
 } from '@entities/ai-interview';
 import { notifications } from '@mantine/notifications';
 import type { AiTurn, AiStartResponse } from '@entities/ai-interview';
+import { useInterviewFlowContext } from '../model/use-interview-flow-context';
 import styles from './InterviewFlow.module.scss';
 
 interface InterviewFlowProps {
@@ -29,11 +30,17 @@ interface InterviewFlowProps {
 }
 
 const InterviewFlow = ({ interviewId }: InterviewFlowProps) => {
-  const [currentTurn, setCurrentTurn] = useState<AiTurn | null>(null);
-  const [answer, setAnswer] = useState('');
-  const [codeAnswer, setCodeAnswer] = useState('');
-  const [isStarted, setIsStarted] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
+  const {
+    state,
+    setCurrentTurn,
+    setAnswer,
+    setCodeAnswer,
+    setIsStarted,
+    setIsFinished,
+    resetAnswers,
+  } = useInterviewFlowContext();
+
+  const { currentTurn, answer, codeAnswer, isStarted, isFinished } = state;
 
   const { data: turns, isLoading: turnsLoading } = useAiInterviewTurns(interviewId);
   const startMutation = useStartAiInterview();
@@ -57,6 +64,7 @@ const InterviewFlow = ({ interviewId }: InterviewFlowProps) => {
         setIsStarted(true);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turns, isStarted]);
 
   const handleStart = async () => {
@@ -126,8 +134,7 @@ const InterviewFlow = ({ interviewId }: InterviewFlowProps) => {
       // Если есть следующий вопрос
       if (response.nextTurn) {
         setCurrentTurn(response.nextTurn);
-        setAnswer('');
-        setCodeAnswer('');
+        resetAnswers();
       } else {
         setIsFinished(true);
         notifications.show({

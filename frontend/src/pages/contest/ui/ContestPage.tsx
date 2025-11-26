@@ -1,5 +1,6 @@
 import { Container, Title, Stack, Loader, Text } from '@mantine/core';
 import { InterviewFlow } from './InterviewFlow';
+import { InterviewFlowProvider } from '../model/interview-flow-context.tsx';
 import { useHead } from '@unhead/react';
 import {
   useCopyPasteBlock,
@@ -68,7 +69,11 @@ const ContestPage = () => {
     <Container size="xl" py="xl" className={styles.section}>
       <Stack gap="lg">
         <Title order={1}>{interview.title}</Title>
-        {id && <InterviewFlow interviewId={id} />}
+        {id && (
+          <InterviewFlowProvider>
+            <InterviewFlow interviewId={id} />
+          </InterviewFlowProvider>
+        )}
       </Stack>
     </Container>
   );

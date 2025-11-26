@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useBlocker } from 'react-router';
 import { modals } from '@mantine/modals';
 import { Image, Text, Button, Stack } from '@mantine/core';
+
+// @ts-expect-error - React is not used in this file
 import React from 'react';
 
 export const usePageLeaveWarning = (enabled: boolean = true) => {
