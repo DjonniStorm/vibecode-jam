@@ -12,12 +12,35 @@ import {
 } from '@mantine/core';
 import { useParams, useNavigate } from 'react-router';
 import { useInterview } from '@entities/interview';
+import { useHead } from '@unhead/react';
 import styles from './ContestStartPage.module.scss';
 
 const ContestStartPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: interview, isLoading } = useInterview(id || '');
+
+  useHead({
+    title: interview ? `${interview.title} - Jam` : 'Собеседование - Jam',
+    meta: [
+      {
+        name: 'description',
+        content: interview
+          ? `Собеседование: ${interview.title}. Статус: ${interview.status}`
+          : 'Информация о собеседовании',
+      },
+      {
+        property: 'og:title',
+        content: interview ? interview.title : 'Собеседование - Jam',
+      },
+      {
+        property: 'og:description',
+        content: interview
+          ? `Техническое собеседование: ${interview.title}`
+          : 'Информация о собеседовании',
+      },
+    ],
+  });
 
   if (isLoading) {
     return (

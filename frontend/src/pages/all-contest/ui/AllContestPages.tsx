@@ -1,10 +1,29 @@
 import { Title, Grid, Text, Center, Loader } from '@mantine/core';
 import { useInterviews } from '@entities/interview';
+import { useHead } from '@unhead/react';
 import styles from './AllContestPages.module.scss';
 import { ContestCard } from './ContestCard';
 
 const AllContestsPages = () => {
   const { data: interviews, isLoading } = useInterviews();
+
+  useHead({
+    title: 'Все собеседования - Jam',
+    meta: [
+      {
+        name: 'description',
+        content: `Список всех ваших собеседований. Всего: ${interviews?.length || 0}`,
+      },
+      {
+        property: 'og:title',
+        content: 'Все собеседования - Jam',
+      },
+      {
+        property: 'og:description',
+        content: 'Просмотр всех ваших собеседований',
+      },
+    ],
+  });
 
   if (isLoading) {
     return (

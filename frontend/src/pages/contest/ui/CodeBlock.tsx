@@ -36,6 +36,8 @@ const CodeBlock = ({ className }: { className?: string }) => {
         options={{
           fontSize: 14,
           padding: { top: 16, bottom: 16 },
+          readOnly: false,
+          contextmenu: false,
         }}
         height="calc(100% - 48px)"
         width="100%"
@@ -44,6 +46,18 @@ const CodeBlock = ({ className }: { className?: string }) => {
         language={language}
         value='console.log("Hello, world!");'
         loading={<Loader />}
+        onMount={(editor) => {
+          // Дополнительная блокировка через Monaco API
+          editor.onKeyDown((e) => {
+            if (
+              (e.ctrlKey || e.metaKey) &&
+              (e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 88)
+            ) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          });
+        }}
       />
     </Stack>
   );

@@ -408,5 +408,3 @@ Authorization: Bearer <token>
    - Задания: `/api/tasks`, `/api/tasks/{id}`, `/api/tasks/interview/{interviewId}`
    - AI‑собеседования: `/api/ai-interviews/{id}/start`, `/answer`, `/finish`, `/turns`
    - Проверка кода: `/api/code-evaluation`
-
-

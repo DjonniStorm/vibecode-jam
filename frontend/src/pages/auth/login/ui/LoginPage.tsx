@@ -5,10 +5,29 @@ import { useNavigate } from 'react-router';
 import { useUserContext } from '@entities/user';
 import { useMe } from '@entities/user';
 import { useEffect } from 'react';
+import { useHead } from '@unhead/react';
 import styles from './LoginPage.module.scss';
 import { notifications } from '@mantine/notifications';
 
 const LoginPage = () => {
+  useHead({
+    title: 'Вход - Jam',
+    meta: [
+      {
+        name: 'description',
+        content:
+          'Войдите в свой аккаунт на платформе Jam для прохождения технических собеседований',
+      },
+      {
+        property: 'og:title',
+        content: 'Вход - Jam',
+      },
+      {
+        property: 'og:description',
+        content: 'Войдите в свой аккаунт на платформе Jam',
+      },
+    ],
+  });
   const form = useLoginForm();
   const loginMutation = useLogin();
   const navigate = useNavigate();

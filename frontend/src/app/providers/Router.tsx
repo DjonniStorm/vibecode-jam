@@ -29,6 +29,10 @@ const RegisterPageLazy = lazy(() =>
   import('@pages/auth/register').then((module) => ({ default: module.RegisterPage })),
 );
 
+const NotFoundPageLazy = lazy(() =>
+  import('@pages/error').then((module) => ({ default: module.NotFoundPage })),
+);
+
 const router = createBrowserRouter([
   {
     path: '/auth/login',
@@ -77,6 +81,10 @@ const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFoundPageLazy />,
   },
 ]);
 

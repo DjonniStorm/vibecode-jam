@@ -4,10 +4,29 @@ import { useRegister, useLogin } from '@entities/auth';
 import { useNavigate } from 'react-router';
 import { useUserContext } from '@entities/user';
 import { useMe } from '@entities/user';
+import { useHead } from '@unhead/react';
 import styles from './RegisterPage.module.scss';
 import { notifications } from '@mantine/notifications';
 
 const RegisterPage = () => {
+  useHead({
+    title: 'Регистрация - Jam',
+    meta: [
+      {
+        name: 'description',
+        content:
+          'Зарегистрируйтесь на платформе Jam для начала прохождения технических собеседований',
+      },
+      {
+        property: 'og:title',
+        content: 'Регистрация - Jam',
+      },
+      {
+        property: 'og:description',
+        content: 'Зарегистрируйтесь на платформе Jam',
+      },
+    ],
+  });
   const form = useRegisterForm();
   const registerMutation = useRegister();
   const loginMutation = useLogin();

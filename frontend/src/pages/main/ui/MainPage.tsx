@@ -1,9 +1,33 @@
 import { Container, Title, Text, Button, Stack, Center } from '@mantine/core';
 import { Link } from 'react-router';
 import { useUserContext } from '@entities/user';
+import { useHead } from '@unhead/react';
 
 const MainPage = () => {
   const { user } = useUserContext();
+
+  useHead({
+    title: 'Jam - Платформа для технических собеседований',
+    meta: [
+      {
+        name: 'description',
+        content:
+          'Платформа для проведения технических собеседований. Решайте задачи, проходите AI-собеседования и развивайте свои навыки программирования.',
+      },
+      {
+        property: 'og:title',
+        content: 'Jam - Платформа для технических собеседований',
+      },
+      {
+        property: 'og:description',
+        content: 'Платформа для проведения технических собеседований',
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+    ],
+  });
 
   return (
     <Center style={{ flex: 1 }}>
