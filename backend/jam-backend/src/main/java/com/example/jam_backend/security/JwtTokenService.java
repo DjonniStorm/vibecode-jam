@@ -64,7 +64,20 @@ public class JwtTokenService {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = properties.getSecret().getBytes(StandardCharsets.UTF_8);
+        String secret = properties.getSecret();
+        if (secret == null || secret.trim().isEmpty()) {
+            throw new IllegalStateException("JWT secret is not configured");
+        }
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        // HS256 требует минимум 256 бит (32 байта)
+        if (keyBytes.length < 32) {
+            // Дополняем до 32 байт, повторяя секрет
+            byte[] padded = new byte[32];
+            for (int i = 0; i < 32; i++) {
+                padded[i] = keyBytes[i % keyBytes.length];
+            }
+            keyBytes = padded;
+        }
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
