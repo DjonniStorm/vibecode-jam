@@ -2,7 +2,9 @@ package com.example.jam_backend.ai;
 
 import com.example.jam_backend.interview.AiInterviewController;
 import com.example.jam_backend.interview.AiInterviewService;
-import com.example.jam_backend.interview.dto.AiInterviewDtos;
+import com.example.jam_backend.interview.dto.AiAnswerRequest;
+import com.example.jam_backend.interview.dto.AiAnswerResponse;
+import com.example.jam_backend.interview.dto.AiTurnDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -36,7 +38,7 @@ class AiInterviewControllerTest {
     @WithMockUser
     void start_endpoint_works() throws Exception {
         UUID interviewId = UUID.randomUUID();
-        AiInterviewDtos.TurnDto dto = new AiInterviewDtos.TurnDto();
+        AiTurnDto dto = new AiTurnDto();
         dto.setId(UUID.randomUUID());
         dto.setTurnNumber(1);
         dto.setQuestion("Вопрос?");
@@ -53,13 +55,13 @@ class AiInterviewControllerTest {
     void answer_endpoint_works() throws Exception {
         UUID interviewId = UUID.randomUUID();
 
-        AiInterviewDtos.AnswerRequest request = new AiInterviewDtos.AnswerRequest();
+        AiAnswerRequest request = new AiAnswerRequest();
         request.setTurnId(UUID.randomUUID());
         request.setAnswer("Ответ");
 
-        AiInterviewDtos.AnswerResponse response = new AiInterviewDtos.AnswerResponse();
-        response.setPreviousTurn(new AiInterviewDtos.TurnDto());
-        response.setNextTurn(new AiInterviewDtos.TurnDto());
+        AiAnswerResponse response = new AiAnswerResponse();
+        response.setPreviousTurn(new AiTurnDto());
+        response.setNextTurn(new AiTurnDto());
 
         Mockito.when(aiInterviewService.answer(eq(interviewId), any()))
                 .thenReturn(response);

@@ -1,7 +1,7 @@
 package com.example.jam_backend.ai;
 
 import com.example.jam_backend.interview.*;
-import com.example.jam_backend.interview.dto.AiInterviewDtos;
+import com.example.jam_backend.interview.dto.AiTurnDto;
 import com.example.jam_backend.llm.LlmClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +47,7 @@ class AiInterviewServiceTest {
                 ArgumentMatchers.anyInt()
         )).thenReturn("Первый вопрос собеседования?");
 
-        AiInterviewDtos.TurnDto turn = aiInterviewService.start(interviewId);
+        AiTurnDto turn = aiInterviewService.start(interviewId);
 
         assertThat(turn.getTurnNumber()).isEqualTo(1);
         assertThat(turn.getQuestion()).contains("Первый вопрос");

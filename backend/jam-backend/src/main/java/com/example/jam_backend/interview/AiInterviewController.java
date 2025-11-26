@@ -1,6 +1,8 @@
 package com.example.jam_backend.interview;
 
-import com.example.jam_backend.interview.dto.AiInterviewDtos;
+import com.example.jam_backend.interview.dto.AiAnswerRequest;
+import com.example.jam_backend.interview.dto.AiAnswerResponse;
+import com.example.jam_backend.interview.dto.AiTurnDto;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,18 +21,18 @@ public class AiInterviewController {
     }
 
     @PostMapping("/{interviewId}/start")
-    public ResponseEntity<AiInterviewDtos.TurnDto> start(@PathVariable UUID interviewId) {
+    public ResponseEntity<AiTurnDto> start(@PathVariable UUID interviewId) {
         return ResponseEntity.ok(aiInterviewService.start(interviewId));
     }
 
     @PostMapping("/{interviewId}/answer")
-    public ResponseEntity<AiInterviewDtos.AnswerResponse> answer(@PathVariable UUID interviewId,
-                                                                 @Valid @RequestBody AiInterviewDtos.AnswerRequest request) {
+    public ResponseEntity<AiAnswerResponse> answer(@PathVariable UUID interviewId,
+                                                   @Valid @RequestBody AiAnswerRequest request) {
         return ResponseEntity.ok(aiInterviewService.answer(interviewId, request));
     }
 
     @GetMapping("/{interviewId}/turns")
-    public ResponseEntity<List<AiInterviewDtos.TurnDto>> getTurns(@PathVariable UUID interviewId) {
+    public ResponseEntity<List<AiTurnDto>> getTurns(@PathVariable UUID interviewId) {
         return ResponseEntity.ok(aiInterviewService.getTurns(interviewId));
     }
 

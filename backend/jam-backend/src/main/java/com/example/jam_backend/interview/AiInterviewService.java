@@ -1,6 +1,8 @@
 package com.example.jam_backend.interview;
 
-import com.example.jam_backend.interview.dto.AiInterviewDtos;
+import com.example.jam_backend.interview.dto.AiAnswerRequest;
+import com.example.jam_backend.interview.dto.AiAnswerResponse;
+import com.example.jam_backend.interview.dto.AiTurnDto;
 import com.example.jam_backend.llm.LlmClient;
 import com.example.jam_backend.llm.dto.LlmMessage;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class AiInterviewService {
     }
 
     @Transactional
-    public AiInterviewDtos.TurnDto start(UUID interviewId) {
+    public AiTurnDto start(UUID interviewId) {
         Interview interview = getInterview(interviewId);
         if (interview.getType() != InterviewType.AI) {
             throw new IllegalArgumentException("Interview is not AI type");
@@ -62,8 +64,7 @@ public class AiInterviewService {
     }
 
     @Transactional
-    public AiInterviewDtos.AnswerResponse answer(UUID interviewId,
-                                                 AiInterviewDtos.AnswerRequest request) {
+    public AiAnswerResponse answer(UUID interviewId, AiAnswerRequest request) {
         Interview interview = getInterview(interviewId);
         InterviewTurn lastTurn = turnRepository.findById(request.getTurnId())
                 .orElseThrow(() -> new IllegalArgumentException("Turn not found"));
@@ -106,14 +107,14 @@ public class AiInterviewService {
                 || nextQuestion.contains("```");
         nextTurn.setCodeQuestion(codeQuestion);
 
-        AiInterviewDtos.AnswerResponse response = new AiInterviewDtos.AnswerResponse();
+        AiAnswerResponse response = new AiAnswerResponse();
         response.setPreviousTurn(toDto(lastTurn));
         response.setNextTurn(toDto(turnRepository.save(nextTurn)));
         return response;
     }
 
     @Transactional(readOnly = true)
-    public List<AiInterviewDtos.TurnDto> getTurns(UUID interviewId) {
+    public List<AiTurnDto> getTurns(UUID interviewId) {
         Interview interview = getInterview(interviewId);
         return turnRepository.findByInterviewOrderByTurnNumberAsc(interview).stream()
                 .map(this::toDto)
@@ -137,8 +138,8 @@ public class AiInterviewService {
                 .orElseThrow(() -> new IllegalArgumentException("Interview not found"));
     }
 
-    private AiInterviewDtos.TurnDto toDto(InterviewTurn turn) {
-        AiInterviewDtos.TurnDto dto = new AiInterviewDtos.TurnDto();
+    private AiTurnDto toDto(InterviewTurn turn) {
+        AiTurnDto dto = new AiTurnDto();
         dto.setId(turn.getId());
         dto.setTurnNumber(turn.getTurnNumber());
         dto.setQuestion(turn.getQuestion());

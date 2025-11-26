@@ -1,5 +1,6 @@
 package com.example.jam_backend.code;
 
+import com.example.jam_backend.code.dto.CodeEvaluationResult;
 import com.example.jam_backend.llm.LlmClient;
 import com.example.jam_backend.llm.dto.LlmMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,7 +21,7 @@ public class CodeEvaluationService {
         this.objectMapper = objectMapper;
     }
 
-    public Result evaluateCode(String question, String language, String userCode) {
+    public CodeEvaluationResult evaluateCode(String question, String language, String userCode) {
         String system = "Ты помощник, который строго и детально проверяет код на " + language + ". " +
                 "Проанализируй код кандидата и верни ТОЛЬКО JSON без пояснений.";
 
@@ -55,7 +56,7 @@ public class CodeEvaluationService {
         return input.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 
-    private Result parseResult(String raw) {
+    private CodeEvaluationResult parseResult(String raw) {
         // если модель вернула текст + JSON, пытаемся вытащить первую JSON-структуру
         String jsonPart = raw.trim();
         int firstBrace = jsonPart.indexOf('{');
@@ -66,7 +67,7 @@ public class CodeEvaluationService {
 
         try {
             JsonNode node = objectMapper.readTree(jsonPart);
-            Result result = new Result();
+            CodeEvaluationResult result = new CodeEvaluationResult();
             result.setRaw(raw);
             result.setCorrect(node.path("is_correct").asBoolean(false));
             if (node.has("score")) {
@@ -87,59 +88,11 @@ public class CodeEvaluationService {
             }
             return result;
         } catch (JsonProcessingException e) {
-            Result fallback = new Result();
+            CodeEvaluationResult fallback = new CodeEvaluationResult();
             fallback.setRaw(raw);
             fallback.setCorrect(false);
             fallback.setIssues("Не удалось распарсить JSON от модели");
             return fallback;
-        }
-    }
-
-    public static class Result {
-        private boolean correct;
-        private Integer score;
-        private String issues;
-        private String suggestedFix;
-        private String raw;
-
-        public boolean isCorrect() {
-            return correct;
-        }
-
-        public void setCorrect(boolean correct) {
-            this.correct = correct;
-        }
-
-        public Integer getScore() {
-            return score;
-        }
-
-        public void setScore(Integer score) {
-            this.score = score;
-        }
-
-        public String getIssues() {
-            return issues;
-        }
-
-        public void setIssues(String issues) {
-            this.issues = issues;
-        }
-
-        public String getSuggestedFix() {
-            return suggestedFix;
-        }
-
-        public void setSuggestedFix(String suggestedFix) {
-            this.suggestedFix = suggestedFix;
-        }
-
-        public String getRaw() {
-            return raw;
-        }
-
-        public void setRaw(String raw) {
-            this.raw = raw;
         }
     }
 }

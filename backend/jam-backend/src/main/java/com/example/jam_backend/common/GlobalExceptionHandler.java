@@ -19,8 +19,8 @@ public class GlobalExceptionHandler {
         error.setError(HttpStatus.BAD_REQUEST.getReasonPhrase());
         error.setMessage("Validation failed");
 
-        List<ApiError.FieldError> fieldErrors = ex.getBindingResult().getFieldErrors().stream()
-                .map(f -> new ApiError.FieldError(f.getField(), f.getDefaultMessage()))
+        List<ApiFieldError> fieldErrors = ex.getBindingResult().getFieldErrors().stream()
+                .map(f -> new ApiFieldError(f.getField(), f.getDefaultMessage()))
                 .toList();
         error.setFieldErrors(fieldErrors);
 
