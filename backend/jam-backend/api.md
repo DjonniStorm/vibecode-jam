@@ -283,6 +283,147 @@ curl http://localhost:8080/api/users/me \
 
 ## 5. AI‑собеседование (чат с GPT)
 
+### 5.0 Как протестировать в Postman (пошаговая инструкция)
+
+**Важно**: Перед тестированием AI‑собеседования нужно:
+1. Зарегистрировать пользователя (`POST /api/auth/register`)
+2. Залогиниться и получить токен (`POST /api/auth/login`)
+3. Создать собеседование с типом `AI` (через SQL или через API, если есть эндпоинт)
+
+#### Шаг 1: Регистрация и логин
+
+**1.1 Регистрация:**
+- Метод: `POST`
+- URL: `http://localhost:8080/api/auth/register`
+- Headers: `Content-Type: application/json`
+- Body (raw JSON):
+```json
+{
+  "name": "Тест",
+  "surname": "Пользователь",
+  "email": "test@example.com",
+  "telegram": "t.me/test",
+  "password": "password123"
+}
+```
+- Сохраните `id` пользователя из ответа.
+
+**1.2 Логин:**
+- Метод: `POST`
+- URL: `http://localhost:8080/api/auth/login`
+- Headers: `Content-Type: application/json`
+- Body (raw JSON):
+```json
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+```
+- Сохраните `token` из ответа (например, в переменную Postman `{{jwt_token}}`).
+
+#### Шаг 2: Создание AI‑собеседования
+
+**Вариант A: Через SQL (если есть доступ к БД)**
+```sql
+INSERT INTO interviews (id, user_id, title, status, type, created_at)
+VALUES (
+  gen_random_uuid(),
+  'UUID_ПОЛЬЗОВАТЕЛЯ_ИЗ_ШАГА_1.1',
+  'AI Собеседование по алгоритмам',
+  'IN_PROGRESS',
+  'AI',
+  NOW()
+);
+```
+- Сохраните `id` собеседования.
+
+**Вариант B: Через API (если есть эндпоинт для создания с типом AI)**
+- Метод: `POST`
+- URL: `http://localhost:8080/api/interviews`
+- Headers:
+  - `Content-Type: application/json`
+  - `Authorization: Bearer {{jwt_token}}`
+- Body:
+```json
+{
+  "userId": "UUID_ПОЛЬЗОВАТЕЛЯ",
+  "title": "AI Собеседование по алгоритмам"
+}
+```
+- Затем через SQL обновите `type = 'AI'` для этого интервью.
+
+#### Шаг 3: Запуск AI‑собеседования (первый вопрос)
+
+- Метод: `POST`
+- URL: `http://localhost:8080/api/ai-interviews/{interviewId}/start`
+  - Замените `{interviewId}` на UUID из шага 2.
+- Headers:
+  - `Authorization: Bearer {{jwt_token}}`
+  - `Content-Type: application/json`
+- Body: не требуется (или пустой `{}`)
+
+**Ответ:**
+```json
+{
+  "id": "turn-1-uuid",
+  "turnNumber": 1,
+  "question": "Расскажите, что такое двоичное дерево поиска...",
+  "userAnswer": null,
+  "codeQuestion": false,
+  "codeLanguage": null,
+  "evaluation": null,
+  "score": null,
+  "createdAt": "2025-11-26T16:20:00"
+}
+```
+- Сохраните `id` хода (например, `{{turn_id}}`) и `interviewId` (например, `{{interview_id}}`).
+
+#### Шаг 4: Ответ на вопрос
+
+- Метод: `POST`
+- URL: `http://localhost:8080/api/ai-interviews/{{interview_id}}/answer`
+- Headers:
+  - `Authorization: Bearer {{jwt_token}}`
+  - `Content-Type: application/json`
+- Body (raw JSON):
+```json
+{
+  "turnId": "{{turn_id}}",
+  "answer": "Двоичное дерево поиска (BST) — это структура данных, где каждый узел имеет не более двух потомков, и для каждого узла все значения в левом поддереве меньше значения узла, а все значения в правом поддереве больше."
+}
+```
+
+**Ответ содержит:**
+- `previousTurn` — обновлённый ход с вашим ответом и оценкой от GPT
+- `nextTurn` — новый ход с следующим вопросом
+
+- Обновите `{{turn_id}}` на `nextTurn.id` из ответа.
+
+#### Шаг 5: Повторение шага 4
+
+Повторяйте шаг 4, каждый раз:
+- Используя новый `turnId` из `nextTurn.id` предыдущего ответа
+- Отвечая на новый вопрос от GPT
+
+#### Шаг 6: Просмотр истории диалога
+
+- Метод: `GET`
+- URL: `http://localhost:8080/api/ai-interviews/{{interview_id}}/turns`
+- Headers: `Authorization: Bearer {{jwt_token}}`
+
+**Ответ:** массив всех ходов собеседования.
+
+#### Шаг 7: Завершение собеседования
+
+- Метод: `POST`
+- URL: `http://localhost:8080/api/ai-interviews/{{interview_id}}/finish`
+- Headers: `Authorization: Bearer {{jwt_token}}`
+- Body: не требуется
+
+После этого `Interview.totalScore` будет пересчитан на основе всех ходов.
+
+---
+
 ### 5.1 Запустить AI‑собеседование
 
 - **POST** `/api/ai-interviews/{interviewId}/start`
