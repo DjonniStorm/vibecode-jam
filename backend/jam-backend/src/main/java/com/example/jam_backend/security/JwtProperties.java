@@ -1,9 +1,7 @@
 package com.example.jam_backend.security;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
-@Component
 @ConfigurationProperties(prefix = "security.jwt")
 public class JwtProperties {
 
