@@ -20,12 +20,6 @@ export LLM_API_KEY=your_llm_api_key_here
 2. Запустите все сервисы через Docker Compose:
 
 ```bash
-docker compose up --build
-```
-
-Или с передачей переменной окружения напрямую:
-
-```bash
 LLM_API_KEY=your_llm_api_key_here docker compose up --build
 ```
 
@@ -188,7 +182,7 @@ npm run dev
 
 Требуется:
 
-- Node.js 18+
+- Node.js 20+
 - npm или yarn
 
 ### Переменные окружения
@@ -210,9 +204,7 @@ npm run dev
 
 ## 📚 API Документация
 
-После запуска backend доступна Swagger документация:
-
-http://localhost:19091/swagger-ui/index.html
+https://github.com/DjonniStorm/vibecode-jam/blob/master/backend/jam-backend/api.md
 
 ## 🧪 Тестирование
 
@@ -240,6 +232,7 @@ http://localhost:19091/swagger-ui/index.html
 - React Router
 - Monaco Editor
 - Unhead
+- Nginx
 
 ## 📄 Лицензия
 
