@@ -56,4 +56,24 @@ class Api {
   }
 }
 
-export const api = new Api('http://localhost:9081');
+declare global {
+  interface ImportMetaEnv {
+    readonly NODE_ENV: 'development' | 'production';
+  }
+  interface ImportMeta {
+    readonly env: ImportMetaEnv;
+  }
+}
+
+const getApiUrl = (): string => {
+  if (
+    import.meta.env.MODE === 'production' ||
+    (import.meta.env.NODE_ENV && import.meta.env.NODE_ENV === 'production') ||
+    import.meta.env.PROD
+  ) {
+    return 'http://backend:8080';
+  }
+  return 'http://localhost:9081';
+};
+
+export const api = new Api(getApiUrl());
