@@ -44,7 +44,9 @@ public class AiInterviewService {
         ));
         messages.add(new LlmMessage(
                 "user",
-                "Начни собеседование: задай первый вопрос. Если нужен код, явно напиши, на каком языке."
+                "Начни собеседование: задай первый вопрос с требованием написать код. " +
+                        "Явно укажи язык программирования (например, Python, Java, JavaScript). " +
+                        "Вопрос должен быть практическим заданием на написание кода."
         ));
 
         String question = llmClient.chatWithGeneral(messages, 0.3, 0.9, 512);
@@ -53,11 +55,31 @@ public class AiInterviewService {
         turn.setInterview(interview);
         turn.setTurnNumber(nextTurnNumber);
         turn.setQuestion(question);
-        boolean codeQuestion = question.toLowerCase().contains("напиши")
-                || question.toLowerCase().contains("реализуй")
-                || question.contains("```");
+        
+        // Первый вопрос всегда с кодом
+        boolean codeQuestion = true;
         turn.setCodeQuestion(codeQuestion);
-        turn.setCodeLanguage(null);
+        
+        // Определяем язык программирования из вопроса
+        String codeLanguage = null;
+        String questionLower = question.toLowerCase();
+        if (questionLower.contains("python")) {
+            codeLanguage = "python";
+        } else if (questionLower.contains("java")) {
+            codeLanguage = "java";
+        } else if (questionLower.contains("javascript") || questionLower.contains("js")) {
+            codeLanguage = "javascript";
+        } else if (questionLower.contains("typescript") || questionLower.contains("ts")) {
+            codeLanguage = "typescript";
+        } else if (questionLower.contains("c++") || questionLower.contains("cpp")) {
+            codeLanguage = "cpp";
+        } else if (questionLower.contains("c#") || questionLower.contains("csharp")) {
+            codeLanguage = "csharp";
+        } else {
+            // По умолчанию Python
+            codeLanguage = "python";
+        }
+        turn.setCodeLanguage(codeLanguage);
 
         InterviewTurn saved = turnRepository.save(turn);
         return toDto(saved);

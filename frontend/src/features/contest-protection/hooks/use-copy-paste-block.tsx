@@ -2,9 +2,6 @@ import { useEffect } from 'react';
 import { modals } from '@mantine/modals';
 import { Image, Text, Button, Stack } from '@mantine/core';
 
-// @ts-expect-error - React is not used in this file
-import React from 'react';
-
 export const useCopyPasteBlock = (enabled: boolean = true) => {
   useEffect(() => {
     if (!enabled) return;
@@ -14,13 +11,16 @@ export const useCopyPasteBlock = (enabled: boolean = true) => {
       modals.open({
         title: 'Копирование запрещено',
         centered: true,
+        size: 'lg',
         children: (
           <Stack gap="md" align="center">
-            <Image src="/images/paste code error.png" alt="Paste error" maw={400} />
+            <Image src="/images/paste code error.png" alt="Paste error" maw={400} fit="contain" />
             <Text ta="center" c="dimmed">
               Копирование и вставка кода запрещены во время прохождения контеста
             </Text>
-            <Button onClick={() => modals.closeAll()}>Понятно</Button>
+            <Button onClick={() => modals.closeAll()} fullWidth>
+              Понятно
+            </Button>
           </Stack>
         ),
       });

@@ -14,7 +14,7 @@ class InterviewApi {
   }
 
   get(): Promise<Interview[]> {
-    return this.api.get<Interview[], Interview[]>(`${this.prefix}/`);
+    return this.api.get<Interview[], Interview[]>(this.prefix);
   }
 
   getInterview(id: string): Promise<Interview> {

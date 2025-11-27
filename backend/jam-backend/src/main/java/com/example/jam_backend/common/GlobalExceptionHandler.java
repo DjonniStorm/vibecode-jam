@@ -47,10 +47,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex) {
+        ex.printStackTrace(); // Выводим стек трейс в консоль для отладки
         ApiError error = new ApiError();
         error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         error.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-        error.setMessage("Unexpected error");
+        error.setMessage("Unexpected error: " + ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }

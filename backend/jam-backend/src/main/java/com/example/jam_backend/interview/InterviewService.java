@@ -35,12 +35,14 @@ public class InterviewService {
         interview.setCreatedAt(LocalDateTime.now());
 
         Interview saved = interviewRepository.save(interview);
-        return toResponse(saved);
+        // Перезагружаем с user для безопасного маппинга в toResponse
+        return toResponse(interviewRepository.findByIdWithUser(saved.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Interview not found after save")));
     }
 
     @Transactional
     public InterviewResponse changeStatus(UUID id, InterviewStatus status) {
-        Interview interview = interviewRepository.findById(id)
+        Interview interview = interviewRepository.findByIdWithUser(id)
                 .orElseThrow(() -> new IllegalArgumentException("Interview not found"));
         interview.setStatus(status);
         return toResponse(interview);
@@ -50,16 +52,37 @@ public class InterviewService {
     public List<InterviewResponse> getByUser(UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        return interviewRepository.findByUser(user).stream()
+        return interviewRepository.findByUserWithUser(user).stream()
                 .map(this::toResponse)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public InterviewResponse getById(UUID id) {
-        Interview interview = interviewRepository.findById(id)
+        Interview interview = interviewRepository.findByIdWithUser(id)
                 .orElseThrow(() -> new IllegalArgumentException("Interview not found"));
         return toResponse(interview);
+    }
+
+    @Transactional(readOnly = true)
+    public List<InterviewResponse> getAllPublic() {
+        try {
+            // Получаем системного пользователя
+            User systemUser = userRepository.findByEmail("system@jam.local")
+                    .orElse(null);
+
+            if (systemUser == null) {
+                return List.of();
+            }
+
+            return interviewRepository.findByUserWithUser(systemUser).stream()
+                    .map(this::toResponse)
+                    .toList();
+        } catch (Exception e) {
+            // Логируем ошибку и возвращаем пустой список
+            e.printStackTrace();
+            return List.of();
+        }
     }
 
     private InterviewResponse toResponse(Interview interview) {
@@ -73,5 +96,3 @@ public class InterviewService {
         return response;
     }
 }
-
-

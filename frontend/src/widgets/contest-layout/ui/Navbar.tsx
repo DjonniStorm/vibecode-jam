@@ -1,9 +1,12 @@
-import { Group, Stack } from '@mantine/core';
+import { Stack, Button } from '@mantine/core';
+import { Link } from 'react-router';
 
 const Navbar = () => {
   return (
-    <Stack>
-      <Group>123</Group>
+    <Stack gap="md">
+      <Button component={Link} to="/" variant="light" fullWidth>
+        На главную
+      </Button>
     </Stack>
   );
 };
