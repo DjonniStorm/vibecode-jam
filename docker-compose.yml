@@ -22,8 +22,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/jamdb
       SPRING_DATASOURCE_USERNAME: jamuser
       SPRING_DATASOURCE_PASSWORD: jampassword
-      SECURITY_JWT_SECRET: asdfaskdfjlkasjdfjasldkfja;lskj3oi4234jrwejf
-      LLM_API_KEY: sk-qdqpnAS37uOl6sVx5Ls0_g
+      SECURITY_JWT_SECRET: ${SECRET}
+      LLM_API_KEY: ${LLM_API_KEY}
     ports:
       - "9081:8080"
     depends_on:
