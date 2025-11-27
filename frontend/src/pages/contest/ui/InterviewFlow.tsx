@@ -57,7 +57,17 @@ const InterviewFlow = ({ interviewId }: InterviewFlowProps) => {
     // Используем requestAnimationFrame для асинхронного обновления состояния
     requestAnimationFrame(() => {
       if (lastTurn.userAnswer === null) {
-        setCurrentTurn(lastTurn);
+        // Если это первый вопрос и codeQuestion не установлен, принудительно устанавливаем
+        if (lastTurn.turnNumber === 1 && !lastTurn.codeQuestion) {
+          const updatedTurn = {
+            ...lastTurn,
+            codeQuestion: true,
+            codeLanguage: lastTurn.codeLanguage || 'python',
+          };
+          setCurrentTurn(updatedTurn);
+        } else {
+          setCurrentTurn(lastTurn);
+        }
         setIsStarted(true);
       } else {
         setIsFinished(true);
@@ -70,18 +80,21 @@ const InterviewFlow = ({ interviewId }: InterviewFlowProps) => {
   const handleStart = async () => {
     try {
       const response: AiStartResponse = await startMutation.mutateAsync(interviewId);
+      console.log('Start response:', response); // Отладка
       // Преобразуем AiStartResponse в AiTurn
+      // Принудительно устанавливаем codeQuestion = true для первого вопроса
       const turn: AiTurn = {
         id: response.id,
         turnNumber: response.turnNumber,
         question: response.question,
         userAnswer: response.userAnswer,
-        codeQuestion: response.codeQuestion,
-        codeLanguage: response.codeLanguage,
+        codeQuestion: response.codeQuestion !== undefined ? response.codeQuestion : true, // Принудительно true для первого вопроса
+        codeLanguage: response.codeLanguage || 'python', // По умолчанию python
         evaluation: response.evaluation,
         score: response.score,
         createdAt: response.createdAt,
       };
+      console.log('Setting turn:', turn); // Отладка
       setCurrentTurn(turn);
       setIsStarted(true);
       notifications.show({
@@ -314,12 +327,14 @@ const InterviewFlow = ({ interviewId }: InterviewFlowProps) => {
               </Group>
             </Group>
 
-            {currentTurn.codeQuestion ? (
+            {/* Принудительно показываем Monaco Editor для первого вопроса или если codeQuestion === true */}
+            {currentTurn.codeQuestion === true ||
+            (currentTurn.turnNumber === 1 && !currentTurn.userAnswer) ? (
               <div className={styles.editorContainer}>
                 <Editor
                   height="400px"
-                  defaultLanguage={currentTurn.codeLanguage || 'javascript'}
-                  language={currentTurn.codeLanguage || 'javascript'}
+                  defaultLanguage={currentTurn.codeLanguage || 'python'}
+                  language={currentTurn.codeLanguage || 'python'}
                   theme="vs-dark"
                   value={codeAnswer}
                   onChange={(value) => setCodeAnswer(value || '')}
@@ -328,6 +343,7 @@ const InterviewFlow = ({ interviewId }: InterviewFlowProps) => {
                     padding: { top: 16, bottom: 16 },
                     readOnly: false,
                     contextmenu: false,
+                    minimap: { enabled: false },
                   }}
                   onMount={(editor) => {
                     editorRef.current = editor;
