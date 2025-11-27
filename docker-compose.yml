@@ -24,6 +24,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: jampassword
       SECURITY_JWT_SECRET: asdfaskdfjlkasjdfjasldkfja;lskj3oi4234jrwejf
       # LLM_API_KEY передается через переменные окружения при запуске
+      LLM_API_KEY: ${LLM_API_KEY}
     ports:
       - "19091:8080"
     depends_on:
