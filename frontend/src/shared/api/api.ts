@@ -56,24 +56,16 @@ class Api {
   }
 }
 
-declare global {
-  interface ImportMetaEnv {
-    readonly NODE_ENV: 'development' | 'production';
-  }
-  interface ImportMeta {
-    readonly env: ImportMetaEnv;
-  }
-}
-
 const getApiUrl = (): string => {
-  if (
-    import.meta.env.MODE === 'production' ||
-    (import.meta.env.NODE_ENV && import.meta.env.NODE_ENV === 'production') ||
-    import.meta.env.PROD
-  ) {
-    return 'http://backend:8080';
+  // Если задана переменная окружения VITE_API_URL, используем её
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
   }
-  return 'http://localhost:9081';
+
+  // Браузер всегда работает на хосте, поэтому используем localhost
+  // Порт бэкенда проброшен на хост как 19091:8080 (согласно docker-compose.yml)
+  const apiPort = import.meta.env.VITE_API_PORT || '19091';
+  return `http://localhost:${apiPort}`;
 };
 
 export const api = new Api(getApiUrl());

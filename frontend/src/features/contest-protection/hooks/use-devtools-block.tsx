@@ -2,9 +2,6 @@ import { useEffect } from 'react';
 import { modals } from '@mantine/modals';
 import { Image, Text, Button, Stack } from '@mantine/core';
 
-// @ts-expect-error - React is not used in this file
-import React from 'react';
-
 export const useDevToolsBlock = (enabled: boolean = true) => {
   useEffect(() => {
     if (!enabled) return;
@@ -21,13 +18,21 @@ export const useDevToolsBlock = (enabled: boolean = true) => {
           modals.open({
             title: 'Открытие DevTools запрещено',
             centered: true,
+            size: 'lg',
             children: (
               <Stack gap="md" align="center">
-                <Image src="/images/f12 key detected.png" alt="DevTools detected" maw={400} />
+                <Image
+                  src="/images/f12 key detected.png"
+                  alt="DevTools detected"
+                  maw={400}
+                  fit="contain"
+                />
                 <Text ta="center" c="dimmed">
                   Открытие инструментов разработчика запрещено во время прохождения контеста
                 </Text>
-                <Button onClick={() => modals.closeAll()}>Понятно</Button>
+                <Button onClick={() => modals.closeAll()} fullWidth>
+                  Понятно
+                </Button>
               </Stack>
             ),
           });
@@ -50,13 +55,21 @@ export const useDevToolsBlock = (enabled: boolean = true) => {
           modals.open({
             title: 'Открытие DevTools запрещено',
             centered: true,
+            size: 'lg',
             children: (
               <Stack gap="md" align="center">
-                <Image src="/images/f12 key detected.png" alt="DevTools detected" maw={400} />
+                <Image
+                  src="/images/f12 key detected.png"
+                  alt="DevTools detected"
+                  maw={400}
+                  fit="contain"
+                />
                 <Text ta="center" c="dimmed">
                   Открытие инструментов разработчика запрещено во время прохождения контеста
                 </Text>
-                <Button onClick={() => modals.closeAll()}>Понятно</Button>
+                <Button onClick={() => modals.closeAll()} fullWidth>
+                  Понятно
+                </Button>
               </Stack>
             ),
           });

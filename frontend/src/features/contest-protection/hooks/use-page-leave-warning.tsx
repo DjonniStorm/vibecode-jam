@@ -3,9 +3,6 @@ import { useBlocker } from 'react-router';
 import { modals } from '@mantine/modals';
 import { Image, Text, Button, Stack } from '@mantine/core';
 
-// @ts-expect-error - React is not used in this file
-import React from 'react';
-
 export const usePageLeaveWarning = (enabled: boolean = true) => {
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
@@ -19,9 +16,10 @@ export const usePageLeaveWarning = (enabled: boolean = true) => {
       modals.open({
         title: 'Внимание!',
         centered: true,
+        size: 'lg',
         children: (
           <Stack gap="md" align="center">
-            <Image src="/images/focus lost.png" alt="Focus lost" maw={400} />
+            <Image src="/images/focus lost.png" alt="Focus lost" maw={400} fit="contain" />
             <Text ta="center" c="dimmed">
               Вы пытаетесь покинуть страницу контеста. Весь несохраненный прогресс будет потерян.
             </Text>
@@ -32,6 +30,7 @@ export const usePageLeaveWarning = (enabled: boolean = true) => {
                   modals.closeAll();
                 }}
                 color="red"
+                fullWidth
               >
                 Покинуть страницу
               </Button>
@@ -41,6 +40,7 @@ export const usePageLeaveWarning = (enabled: boolean = true) => {
                   blocker.reset();
                   modals.closeAll();
                 }}
+                fullWidth
               >
                 Остаться на странице
               </Button>
@@ -66,13 +66,16 @@ export const usePageLeaveWarning = (enabled: boolean = true) => {
         modals.open({
           title: 'Внимание!',
           centered: true,
+          size: 'lg',
           children: (
             <Stack gap="md" align="center">
-              <Image src="/images/focus lost.png" alt="Focus lost" maw={400} />
+              <Image src="/images/focus lost.png" alt="Focus lost" maw={400} fit="contain" />
               <Text ta="center" c="dimmed">
                 Вы переключились на другую вкладку. Пожалуйста, вернитесь к контесту.
               </Text>
-              <Button onClick={() => modals.closeAll()}>Понятно</Button>
+              <Button onClick={() => modals.closeAll()} fullWidth>
+                Понятно
+              </Button>
             </Stack>
           ),
         });

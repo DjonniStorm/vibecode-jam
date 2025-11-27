@@ -11,3 +11,16 @@ body,
 main {
   flex: 1;
 }
+
+/* Стили для модалок Mantine - гарантируем правильное отображение */
+.mantine-Modal-root {
+  z-index: 1000 !important;
+}
+
+.mantine-Modal-overlay {
+  z-index: 999 !important;
+}
+
+.mantine-Modal-inner {
+  z-index: 1001 !important;
+}

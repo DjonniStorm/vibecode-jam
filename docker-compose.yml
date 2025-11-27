@@ -23,9 +23,9 @@ services:
       SPRING_DATASOURCE_USERNAME: jamuser
       SPRING_DATASOURCE_PASSWORD: jampassword
       SECURITY_JWT_SECRET: asdfaskdfjlkasjdfjasldkfja;lskj3oi4234jrwejf
-      LLM_API_KEY: sk-qdqpnAS37uOl6sVx5Ls0_g
+      # LLM_API_KEY передается через переменные окружения при запуске
     ports:
-      - "9081:8080"
+      - "19091:8080"
     depends_on:
       - postgres
 
@@ -35,6 +35,7 @@ services:
     container_name: jam-frontend
     environment:
       - NODE_ENV=production
+      - VITE_API_PORT=19091
     ports:
       - "5173:80"
     depends_on:

@@ -197,6 +197,23 @@ const InterviewFlow = ({ interviewId }: InterviewFlowProps) => {
     );
   }
 
+  // Fallback: если нет текущего вопроса, но собеседование начато
+  if (!currentTurn && isStarted && !isFinished) {
+    return (
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Stack gap="md" align="center">
+          <Title order={2}>Ожидание вопроса...</Title>
+          <Text c="dimmed" ta="center">
+            Загрузка вопроса. Если вопрос не появился, попробуйте обновить страницу.
+          </Text>
+          <Button size="lg" onClick={handleStart} loading={startMutation.isPending}>
+            Загрузить вопрос
+          </Button>
+        </Stack>
+      </Card>
+    );
+  }
+
   if (isFinished && currentTurn === null) {
     return (
       <Card shadow="sm" padding="lg" radius="md" withBorder>

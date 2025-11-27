@@ -198,6 +198,7 @@ curl http://localhost:8080/api/users/me \
 ```
 
 **Поля:**
+
 - `userId` (обязательно) — UUID пользователя
 - `title` (обязательно) — название собеседования
 - `type` (опционально) — тип собеседования: `"MANUAL"` или `"AI"`. Если не указано, по умолчанию `"MANUAL"`
@@ -205,6 +206,7 @@ curl http://localhost:8080/api/users/me \
 **Примеры:**
 
 Обычное собеседование:
+
 ```json
 {
   "userId": "c3f2c9c9-1a23-4c23-b9a1-0a1a1c5a9a11",
@@ -214,6 +216,7 @@ curl http://localhost:8080/api/users/me \
 ```
 
 AI‑собеседование:
+
 ```json
 {
   "userId": "c3f2c9c9-1a23-4c23-b9a1-0a1a1c5a9a11",
@@ -313,6 +316,7 @@ AI‑собеседование:
 ### 5.0 Как протестировать в Postman (пошаговая инструкция)
 
 **Важно**: Перед тестированием AI‑собеседования нужно:
+
 1. Зарегистрировать пользователя (`POST /api/auth/register`)
 2. Залогиниться и получить токен (`POST /api/auth/login`)
 3. Создать собеседование с типом `AI` (через SQL или через API, если есть эндпоинт)
@@ -320,10 +324,12 @@ AI‑собеседование:
 #### Шаг 1: Регистрация и логин
 
 **1.1 Регистрация:**
+
 - Метод: `POST`
 - URL: `http://localhost:8080/api/auth/register`
 - Headers: `Content-Type: application/json`
 - Body (raw JSON):
+
 ```json
 {
   "name": "Тест",
@@ -333,19 +339,23 @@ AI‑собеседование:
   "password": "password123"
 }
 ```
+
 - Сохраните `id` пользователя из ответа.
 
 **1.2 Логин:**
+
 - Метод: `POST`
 - URL: `http://localhost:8080/api/auth/login`
 - Headers: `Content-Type: application/json`
 - Body (raw JSON):
+
 ```json
 {
   "email": "test@example.com",
   "password": "password123"
 }
 ```
+
 - Сохраните `token` из ответа (например, в переменную Postman `{{jwt_token}}`).
 
 #### Шаг 2: Создание AI‑собеседования
@@ -356,6 +366,7 @@ AI‑собеседование:
   - `Content-Type: application/json`
   - `Authorization: Bearer {{jwt_token}}`
 - Body:
+
 ```json
 {
   "userId": "UUID_ПОЛЬЗОВАТЕЛЯ_ИЗ_ШАГА_1.1",
@@ -379,6 +390,7 @@ AI‑собеседование:
 - Body: не требуется (или пустой `{}`)
 
 **Ответ:**
+
 ```json
 {
   "id": "turn-1-uuid",
@@ -392,6 +404,7 @@ AI‑собеседование:
   "createdAt": "2025-11-26T16:20:00"
 }
 ```
+
 - Сохраните `id` хода (например, `{{turn_id}}`) и `interviewId` (например, `{{interview_id}}`).
 
 #### Шаг 4: Ответ на вопрос
@@ -402,6 +415,7 @@ AI‑собеседование:
   - `Authorization: Bearer {{jwt_token}}`
   - `Content-Type: application/json`
 - Body (raw JSON):
+
 ```json
 {
   "turnId": "{{turn_id}}",
@@ -410,6 +424,7 @@ AI‑собеседование:
 ```
 
 **Ответ содержит:**
+
 - `previousTurn` — обновлённый ход с вашим ответом и оценкой от GPT
 - `nextTurn` — новый ход с следующим вопросом
 
@@ -418,6 +433,7 @@ AI‑собеседование:
 #### Шаг 5: Повторение шага 4
 
 Повторяйте шаг 4, каждый раз:
+
 - Используя новый `turnId` из `nextTurn.id` предыдущего ответа
 - Отвечая на новый вопрос от GPT
 
